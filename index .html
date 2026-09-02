@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Construya su casa</title>
+</head>
+<body>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bitter:wght@600;700&family=Source+Sans+3:wght@400;600;700&display=swap">
+<style>
+  :root{
+    --tinta:#1F2A37; --suave:#5B6674; --fondo:#FBFAF7; --tarjeta:#FFFFFF; --arena:#F1EDE4;
+    --linea:#E3DFD6; --techo:#8C3A2B; --cimiento:#6B5B4E; --azul:#24425B; --acento:#E07A5F;
+    --verde:#3E7C4F; --ambar:#C9922A; --rojo:#B0442E;
+    --verde-f:#E7F0E9; --ambar-f:#F7EEDC; --rojo-f:#F6E6E1; --btn:#24425B;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --tinta:#ECEAE4; --suave:#A8AFB8; --fondo:#161B22; --tarjeta:#1F2630; --arena:#262E39;
+      --linea:#39424E; --techo:#C06A54; --cimiento:#9C8874; --azul:#8FB0CC; --acento:#E07A5F;
+      --verde:#6FAE7F; --ambar:#D9A441; --rojo:#D0705A;
+      --verde-f:#22352A; --ambar-f:#3A311F; --rojo-f:#3A2620; --btn:#2E5474;
+    }
+  }
+  :root[data-theme="dark"]{
+    --tinta:#ECEAE4; --suave:#A8AFB8; --fondo:#161B22; --tarjeta:#1F2630; --arena:#262E39;
+    --linea:#39424E; --techo:#C06A54; --cimiento:#9C8874; --azul:#8FB0CC; --acento:#E07A5F;
+    --verde:#6FAE7F; --ambar:#D9A441; --rojo:#D0705A;
+    --verde-f:#22352A; --ambar-f:#3A311F; --rojo-f:#3A2620; --btn:#2E5474;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--fondo);color:var(--tinta);
+    font-family:"Source Sans 3",-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+    font-size:17px;line-height:1.5;}
+  .wrap{max-width:640px;margin:0 auto;padding:20px 16px 60px}
+  h1,h2,h3{font-family:Bitter,Georgia,serif;text-wrap:balance;margin:0}
+  .eyebrow{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--acento)}
+  .casa-box{background:var(--tarjeta);border:1px solid var(--linea);border-radius:14px;padding:14px 14px 8px;margin:14px 0}
+  .btn{display:block;width:100%;border:none;border-radius:12px;padding:14px 16px;font:inherit;font-weight:600;
+    cursor:pointer;text-align:left;margin-top:10px;color:var(--tinta);background:var(--arena)}
+  .btn:focus-visible{outline:3px solid var(--acento);outline-offset:2px}
+  .btn-principal{background:var(--btn);color:#fff;text-align:center;font-size:18px}
+  .btn-resp{display:flex;align-items:center;gap:12px;border:2px solid var(--linea);background:var(--tarjeta)}
+  .btn-resp .dot{width:22px;height:22px;border-radius:50%;flex:0 0 22px}
+  .btn-resp:active{transform:scale(.99)}
+  .btn-resp.sel-2{border-color:var(--verde);background:var(--verde-f)}
+  .btn-resp.sel-1{border-color:var(--ambar);background:var(--ambar-f)}
+  .btn-resp.sel-0{border-color:var(--rojo);background:var(--rojo-f)}
+  .dot-2{background:var(--verde)} .dot-1{background:var(--ambar)} .dot-0{background:var(--rojo)}
+  .chip{display:inline-flex;align-items:center;gap:8px;background:var(--arena);border-radius:999px;
+    padding:4px 12px;font-size:13px;font-weight:700}
+  .chip .num{width:22px;height:22px;border-radius:50%;color:#fff;display:inline-flex;align-items:center;
+    justify-content:center;font-size:12px}
+  .pilar-banner{display:flex;align-items:center;gap:12px;border-radius:12px;padding:12px 14px;margin-bottom:4px}
+  .pilar-banner .num{width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.25);display:flex;
+    align-items:center;justify-content:center;font-weight:700;font-size:16px;flex:0 0 34px}
+  .pilar-banner .tit{font-family:Bitter,Georgia,serif;font-size:18px;font-weight:700;line-height:1.25}
+  .pilar-banner .sub{font-size:13px;opacity:.9}
+  .progreso{height:8px;background:var(--arena);border-radius:99px;overflow:hidden;margin:10px 0 4px}
+  .progreso>div{height:100%;background:var(--acento);border-radius:99px;transition:width .3s}
+  .peq{font-size:13px;color:var(--suave)}
+  .tarjeta-preg{background:var(--tarjeta);border:1px solid var(--linea);border-radius:14px;padding:18px;margin-top:12px}
+  .num-est{font-size:12px;font-weight:700;color:var(--suave);letter-spacing:.08em;text-transform:uppercase}
+  .pregunta{font-family:Bitter,Georgia,serif;font-size:20px;font-weight:600;line-height:1.35;margin:6px 0 4px}
+  .atras{background:none;border:none;color:var(--suave);font:inherit;font-size:14px;cursor:pointer;
+    padding:8px 0;text-decoration:underline}
+  .barra-pilar{display:grid;grid-template-columns:26px 1fr 52px;gap:10px;align-items:center;margin-top:10px}
+  .barra-pilar .num{width:24px;height:24px;border-radius:50%;color:#fff;display:flex;align-items:center;
+    justify-content:center;font-size:12px;font-weight:700}
+  .barra-pista{height:14px;background:var(--arena);border-radius:99px;overflow:hidden}
+  .barra-pista>div{height:100%;border-radius:99px}
+  .pct{font-weight:700;font-variant-numeric:tabular-nums;text-align:right;font-size:14px}
+  .nombre-pilar{font-size:13px;font-weight:600;margin-bottom:2px}
+  .falta-item{border-left:4px solid var(--rojo);background:var(--tarjeta);border-radius:0 10px 10px 0;
+    padding:10px 14px;margin-top:8px}
+  .falta-item.medio{border-left-color:var(--ambar)}
+  .falta-item b{display:block}
+  .falta-item span{font-size:14px;color:var(--suave)}
+  .resumen-num{font-family:Bitter,Georgia,serif;font-size:54px;font-weight:700;line-height:1}
+  .veredicto{font-family:Bitter,Georgia,serif;font-size:22px;font-weight:600;margin-top:4px}
+  .nota-priv{background:var(--arena);border-radius:10px;padding:10px 14px;font-size:14px;margin-top:14px}
+  .fila-botones{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+  .fila-botones .btn{width:auto;flex:1;min-width:160px;text-align:center;margin-top:0}
+  [hidden]{display:none!important}
+  @media print{
+    body{background:#fff;color:#111}
+    .no-print{display:none!important}
+    .wrap{max-width:100%;padding:0}
+    .falta-item,.casa-box{break-inside:avoid;border-color:#ccc}
+  }
+</style>
+
+<div class="wrap">
+  <!-- ============ INICIO ============ -->
+  <section id="inicio">
+    <div class="eyebrow">La casa de la gobernanza</div>
+    <h1 style="font-size:34px;margin-top:6px">Construya su casa</h1>
+    <p style="margin:10px 0 0">¿Qué tan firme está la casa de su institución? Responda una pregunta por cada uno
+    de los <b>60 estándares de gobernanza</b> y vea cómo se construye su casa: qué columnas están firmes,
+    cuáles están a medias y cuáles faltan.</p>
+    <div class="casa-box"><svg id="casaInicio" viewBox="0 0 340 260" role="img" aria-label="La casa de la gobernanza"></svg></div>
+    <p class="peq" style="margin:0">La casa de la gobernanza: el cimiento es la Junta Directiva, las ocho columnas
+    son los pilares y el techo es la sostenibilidad. Cada respuesta suya va llenando una columna.</p>
+    <label class="peq" for="nomInst" style="display:block;margin-top:16px;font-weight:700">Nombre de su institución (opcional; aparece en el resultado impreso)</label>
+    <input id="nomInst" type="text" maxlength="80" placeholder="Escríbalo aquí si lo desea"
+      style="width:100%;margin-top:6px;padding:12px 14px;border:2px solid var(--linea);border-radius:12px;background:var(--tarjeta);color:var(--tinta);font:inherit">
+    <button class="btn btn-principal" id="btnEmpezar" style="margin-top:14px">Empezar a construir</button>
+    <button class="btn btn-principal" id="btnContinuar" hidden style="background:var(--acento)">Continuar donde me quedé</button>
+    <div class="nota-priv"><b>Sus respuestas son privadas.</b> Se guardan solo en este teléfono o computadora.
+    Nadie más las ve: ni el fondeador, ni los facilitadores, ni otras instituciones. Es una herramienta para
+    uso interno de su Junta Directiva y su gerencia.</div>
+    <p class="peq" style="margin-top:14px">Basado en los pilares y estándares de gobernanza del Programa GIF,
+    más los pilares 7 (desempeño social) y 8 (gestión ambiental). Sirve para cualquier tipo de institución: cooperativas, asociaciones de productores, cajas rurales o microfinancieras. Se responde en unos 15 minutos, solo o en equipo.
+    Consejo: respóndala en la próxima sesión de Junta, entre todos.</p>
+    <p class="peq" style="margin-top:10px;font-weight:600">Una herramienta de Grupo Analítica, preparada para la
+    capacitación en gobernanza de Oikocredit · 2026.</p>
+  </section>
+
+  <!-- ============ ENTRADA A PILAR ============ -->
+  <section id="pilarIntro" hidden>
+    <span class="chip"><span class="num" id="ipNum"></span><span id="ipCorto"></span></span>
+    <p id="ipLevantada" hidden style="margin:12px 0 0;font-weight:700;color:var(--verde)"></p>
+    <h2 style="font-size:26px;margin-top:12px" id="ipNombre"></h2>
+    <p class="peq" id="ipRango" style="margin:2px 0 0;font-weight:700"></p>
+    <div class="casa-box"><svg id="casaPilar" viewBox="0 0 340 260" role="img" aria-label="Su casa, en construcción"></svg></div>
+    <div class="tarjeta-preg" style="margin-top:0">
+      <div class="num-est">¿De qué se trata este pilar?</div>
+      <p id="ipQue" style="margin:6px 0 0;font-size:18px"></p>
+    </div>
+    <button class="btn btn-principal" id="btnLevantar" style="margin-top:14px">Levantar esta columna</button>
+  </section>
+
+  <!-- ============ PREGUNTAS ============ -->
+  <section id="juego" hidden>
+    <div class="no-print">
+      <div class="pilar-banner" id="pilBanner">
+        <span class="num" id="chipNum"></span>
+        <div><div class="tit" id="chipNombre"></div><div class="sub" id="chipSub"></div></div>
+      </div>
+      <div class="progreso"><div id="barraProg" style="width:0%"></div></div>
+      <div class="peq"><span id="lblProg"></span></div>
+    </div>
+    <div class="casa-box"><svg id="casaJuego" viewBox="0 0 340 260" role="img" aria-label="Su casa, en construcción"></svg></div>
+    <div class="tarjeta-preg">
+      <div class="num-est" id="numEst"></div>
+      <div class="pregunta" id="txtPregunta"></div>
+      <p class="peq" id="txtPista" style="margin:2px 0 6px"></p>
+      <button class="btn btn-resp" data-v="2"><span class="dot dot-2"></span><span>Sí, lo tenemos y funciona</span></button>
+      <button class="btn btn-resp" data-v="1"><span class="dot dot-1"></span><span>Lo tenemos a medias</span></button>
+      <button class="btn btn-resp" data-v="0"><span class="dot dot-0"></span><span>No lo tenemos</span></button>
+      <button class="atras" id="btnAtras">← Regresar a la pregunta anterior</button>
+    </div>
+  </section>
+
+  <!-- ============ RESULTADOS ============ -->
+  <section id="resultado" hidden>
+    <div class="eyebrow">Resultado del ejercicio</div>
+    <h2 style="font-size:28px;margin-top:6px">Así quedó su casa</h2>
+    <p class="peq" id="metaResultado" style="margin:4px 0 0;font-weight:600"></p>
+    <div class="casa-box"><svg id="casaFinal" viewBox="0 0 340 260" role="img" aria-label="Su casa terminada"></svg></div>
+    <div style="display:flex;align-items:baseline;gap:14px;flex-wrap:wrap">
+      <div><div class="resumen-num" id="pctTotal"></div><div class="peq">de la casa construida</div></div>
+      <div style="flex:1;min-width:220px"><div class="veredicto" id="veredicto"></div><p id="veredictoTxt" style="margin:4px 0 0;font-size:15px"></p></div>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:14px">
+      <span class="chip" style="background:var(--verde-f)"><span class="dot dot-2" style="width:14px;height:14px;border-radius:50%"></span>&nbsp;<span id="cntVerde"></span></span>
+      <span class="chip" style="background:var(--ambar-f)"><span class="dot dot-1" style="width:14px;height:14px;border-radius:50%"></span>&nbsp;<span id="cntAmbar"></span></span>
+      <span class="chip" style="background:var(--rojo-f)"><span class="dot dot-0" style="width:14px;height:14px;border-radius:50%"></span>&nbsp;<span id="cntRojo"></span></span>
+    </div>
+    <h3 style="font-size:20px;margin-top:26px">Columna por columna, con sugerencias</h3>
+    <p class="peq" style="margin:4px 0 0">Cada pilar muestra su porcentaje, una sugerencia y el cumplimiento de cada estándar: 100% lo tenemos y funciona, 50% a medias, 0% no lo tenemos.</p>
+    <div id="listaPilares"></div>
+    <h3 style="font-size:20px;margin-top:26px">Lo que le falta a su casa</h3>
+    <p class="peq" style="margin:4px 0 0">Primero lo rojo (no lo tenemos), luego lo amarillo (a medias). Cada punto
+    dice qué significa tenerlo. Esta lista puede ser la agenda de sus próximas sesiones de Junta.</p>
+    <div id="listaFaltas"></div>
+    <div id="sinFaltas" hidden style="margin-top:10px"><b>No les falta nada según sus respuestas.</b>
+      El siguiente paso es mantenerlo: revisar cada año que todo siga funcionando.</div>
+    <div class="nota-priv">Guarde este resultado e inclúyalo en la agenda de su próxima sesión de Junta Directiva.
+    Repita el ejercicio cada año y compare: la casa se construye por partes, no de un solo golpe.</div>
+    <p class="peq" style="margin-top:14px">Ejercicio "Construya su casa" · Grupo Analítica · Capacitación en
+    gobernanza de Oikocredit · Basada en los estándares del Programa GIF.</p>
+    <div class="fila-botones no-print">
+      <button class="btn btn-principal" onclick="window.print()">Imprimir o guardar como PDF</button>
+      <button class="btn" id="btnRevisar">Revisar mis respuestas</button>
+      <button class="btn" id="btnReiniciar">Empezar de nuevo</button>
+    </div>
+  </section>
+</div>
+
+<script>
+"use strict";
+// ---------- Datos: 8 pilares, 60 estándares ----------
+// [código, pregunta coloquial, qué significa tenerlo]
+const PILARES = [
+  { nombre:"Derechos de los asociados", oficial:"Derechos de Propiedad", que:"Los asociados son los dueños de la institución. Tienen derecho a saber, a opinar y a votar.", color:"#24425B", est:[
+    ["1","¿Todos los asociados reciben el mismo trato, sin preferidos?","Paridad de trato: todos los asociados valen igual."],
+    ["2","Cuando hay un desacuerdo, ¿hay una forma clara y conocida de resolverlo?","Mecanismos para resolver controversias, por escrito y conocidos."],
+    ["3","¿Los asociados reciben información clara y a tiempo, no hasta el día de la asamblea?","Derecho de información y comunicación."],
+    ["4","Antes de decidir algo que afecte los derechos de los asociados, ¿se les consulta?","Ninguna decisión les quita derechos sin consultarles."],
+    ["5","¿La asamblea se reúne como manda el estatuto y decide lo grande?","La Asamblea General funciona como máxima autoridad."],
+    ["6","¿Hay un reglamento escrito de cómo funciona la asamblea?","Reglamento de Asamblea General."],
+    ["7","¿La convocatoria llega con tiempo, a todos y por medios que de verdad llegan?","Mecanismos de convocatoria que alcanzan a todos."],
+    ["8","¿Está claro quién puede votar y cómo se cuentan los votos?","Reglas de votación y registro de miembros al día."],
+    ["9","¿Un asociado puede proponer temas para la agenda de la asamblea?","Los asociados pueden introducir puntos de agenda."],
+    ["10","¿Cada asociado vota libremente, sin presiones?","Derecho de voto libre."]
+  ]},
+  { nombre:"Junta Directiva", oficial:"Órgano de Dirección", que:"La Junta Directiva dirige y vigila; no administra el día a día. Este pilar es la Junta misma: cómo se elige, cómo se reúne, cómo decide y cómo se renueva.", color:"#24425B", est:[
+    ["11","¿Está escrito qué decide la Junta y qué decide la gerencia?","Funciones y competencias separadas por escrito."],
+    ["12","¿La Junta tiene su propio reglamento y lo cumple?","Reglamento del Órgano de Dirección."],
+    ["13","¿Está definido cuántos directores son y qué perfiles se necesitan?","Conformación de la Junta con perfiles claros."],
+    ["14","¿Hay reglas claras para elegir y reelegir a los directores?","Nombramiento y reelección con reglas."],
+    ["15","¿Hay reglas claras para cuando un director sale, y de qué entrega antes de irse?","Desvinculación ordenada de directores."],
+    ["16","¿Está definido si los directores reciben dietas o pago, y cuánto?","Retribución de la Junta definida y transparente."],
+    ["17","¿La Junta evalúa su propio trabajo al menos una vez al año?","Evaluación anual de la Junta."],
+    ["18","¿Cada director sabe qué le toca hacer y qué puede exigir?","Deberes y derechos de los directores, con inducción."],
+    ["19","¿La Junta se reúne con regularidad, con agenda y con acta de decisiones?","Reuniones con agenda y actas que registran decisiones."],
+    ["20","¿Está claro qué se delega a la gerencia y hasta dónde?","Política de delegación de facultades."],
+    ["21","¿Funcionan comités que apoyan a la Junta: auditoría, riesgos, gobierno?","Comités de la Junta activos."]
+  ]},
+  { nombre:"Gestión", oficial:"Gestión", que:"La gerencia ejecuta lo que la Junta decide y responde por los resultados. Aquí vive el plan de sucesión.", color:"#24425B", est:[
+    ["22","¿La gerencia ejecuta y la Junta dirige y vigila, cada quien en lo suyo?","Rol del ejecutivo principal y la alta gerencia respetado."],
+    ["23","¿Se atiende bien a asociados, clientes, personal, fondeadores y comunidad?","Relacionamiento con los grupos de interés."],
+    ["24","¿Se sirve bien a quien más lo necesita, con trato justo y acceso a los servicios?","Compromiso con clientes e inclusión financiera."],
+    ["25","¿El personal trabaja con condiciones dignas, capacitación y respeto?","Trato responsable del personal."],
+    ["26","Si alguien clave se va mañana, ¿se sabe quién sigue y está preparado?","Plan de sucesión escrito y vigente."],
+    ["27","¿Hay reglas claras de cómo se paga a la gerencia y al personal?","Política de remuneración."],
+    ["28","¿El trabajo de la gerencia se mide contra metas cada año?","Evaluación del desempeño de la gerencia."],
+    ["29","¿Un comité propone quién ocupa los puestos clave y cuánto gana?","Comité de nombramiento y retribuciones."]
+  ]},
+  { nombre:"Riesgos y control", oficial:"Cumplimiento y Gestión de Riesgos", que:"Alguien revisa los números además de quien los hace, y se sabe qué puede salir mal antes de que salga mal.", color:"#24425B", est:[
+    ["30","¿Hay controles para que las cosas se hagan bien: firmas, arqueos, revisiones?","Sistema de control funcionando."],
+    ["31","¿Un comité de la Junta vigila los controles?","Comité de auditoría activo."],
+    ["32","¿Alguien de adentro revisa de forma independiente y reporta a la Junta?","Auditoría interna."],
+    ["33","¿Alguien de afuera revisa cada año?","Auditoría externa anual."],
+    ["34","¿Se conocen los riesgos y se sabe qué hacer si se presentan?","Gestión integral de riesgos."],
+    ["35","¿Un comité vigila los riesgos y avisa a la Junta a tiempo?","Comité de riesgos activo."],
+    ["36","¿Se cumple la ley, los contratos y lo prometido a los fondeadores?","Cumplimiento de obligaciones y compromisos."]
+  ]},
+  { nombre:"Ética", oficial:"Ética y Conflicto de Interés", que:"Reglas de conducta que todos conocen, y una regla de oro: nadie decide sobre lo que le conviene a sí mismo.", color:"#24425B", est:[
+    ["37","¿Hay un código de ética escrito que todos conocen y firman?","Código de ética vivo, no archivado."],
+    ["38","¿Quien tiene interés propio en una decisión lo declara y se aparta?","Manejo del conflicto de interés."],
+    ["39","¿Los créditos, compras o contratos con familiares y directivos tienen reglas y se registran?","Operaciones con partes vinculadas reguladas y a la vista."],
+    ["40","¿Cualquiera puede denunciar sin miedo a represalias?","Canales de denuncia."]
+  ]},
+  { nombre:"Transparencia", oficial:"Comunicación y Transparencia", que:"Lo que pasa en la institución se cuenta con claridad: a los asociados, a los clientes y a los fondeadores.", color:"#24425B", est:[
+    ["41","¿Está definido qué se informa, a quién y cuándo?","Política de información."],
+    ["42","¿Lo esencial de la institución se puede consultar fácilmente?","Información de acceso público."],
+    ["43","¿Las operaciones con vinculados se informan, no se esconden?","Transacciones entre partes relacionadas informadas."],
+    ["44","¿El asociado o cliente entiende lo que firma: precio, condiciones y cargos?","Transparencia contractual con el cliente."],
+    ["45","¿Cada año se publica un informe de gobernanza y desempeño social?","Informe anual de gobernanza y desempeño social."]
+  ]},
+  { nombre:"Social", oficial:"Desempeño Social en la Gobernanza", que:"La institución existe para servir a personas. Eso se define, se mide y se vigila, igual que lo financiero.", color:"#D9A441", est:[
+    ["7.1","¿Se sabe a quién se quiere servir y qué cambio se busca en sus vidas?","Objetivos de impacto social definidos."],
+    ["7.2","¿La Junta pide y revisa el informe social como pide el financiero?","Competencias y compromiso de la directiva con lo social."],
+    ["7.3","¿La gerencia lidera lo social con metas e indicadores?","Gestión social y liderazgo de la alta gerencia."],
+    ["7.4","¿Se cuida no abusar del asociado o cliente: ni sobreendeudarlo ni maltratarlo en el cobro o en el pago?","Gestión de riesgos y cumplimiento social."],
+    ["7.5","¿El código de ética incluye el trato justo al asociado, al cliente y a la comunidad?","Código de ética con valores sociales."],
+    ["7.6","¿Se busca ganar dinero sin dejar de lado a las personas ni el entorno?","Equilibrio económico, social y ambiental."],
+    ["7.7","¿Los precios, tasas y cargos son justos, sin poner en riesgo la institución?","Equilibrio en precios, tarifas e indicadores."]
+  ]},
+  { nombre:"Ambiental", oficial:"Gestión Medioambiental (GMA)", que:"Cuidar el entorno: en lo que la institución hace adentro y en lo que produce o financia afuera.", color:"#4E7C59", est:[
+    ["8.1","¿La institución tiene objetivos claros en lo ambiental?","Objetivos de la organización en la GMA."],
+    ["8.2","¿La asamblea conoce y aprueba el compromiso ambiental?","La Asamblea y su rol con la GMA."],
+    ["8.3","¿La gerencia tiene responsables y metas ambientales?","GMA de la alta gerencia."],
+    ["8.4","¿Se revisa qué actividades propias o financiadas dañan el ambiente y se cumple la ley?","Cumplimiento y gestión de riesgos ambientales."],
+    ["8.5","¿Se informa lo que se hace en lo ambiental?","Transparencia en la GMA."],
+    ["8.6","¿Se busca crecer sin dañar el entorno?","Equilibrio del crecimiento económico con la GMA."],
+    ["8.7","¿Se ahorra energía, agua y papel en la propia institución?","Ecoeficiencia: buenas prácticas ambientales internas."],
+    ["8.8","¿Existen productos o servicios verdes: riego, paneles solares, café o ganadería sostenible, reforestación?","Productos financieros verdes."]
+  ]}
+];
+const SUGERENCIAS=[
+ {b:"Empiecen por la asamblea: convocatoria que llegue a todos y reglas de voto claras (est. 5, 7 y 8).",
+  m:"Refuercen la información a los asociados: que sepan antes, no hasta el día de la asamblea (est. 3).",
+  a:"Manténganlo: asamblea puntual, información a tiempo y registro de miembros al día."},
+ {b:"Primero lo básico: reuniones con agenda y acta, y por escrito qué decide la Junta y qué la gerencia (est. 19 y 11).",
+  m:"Falta formalizar: reglamento de la Junta, evaluación anual y reglas de entrada y salida de directores (est. 12, 17, 14 y 15).",
+  a:"Junta firme. Cuiden la renovación: perfiles definidos y reelección con reglas (est. 13 y 14)."},
+ {b:"Definan el plan de sucesión y la evaluación de la gerencia: son los dos que más pesan (est. 26 y 28).",
+  m:"Completen las reglas de pago y el comité de nombramientos y retribuciones (est. 27 y 29).",
+  a:"Revisen el plan de sucesión cada año en sesión de Junta, para que no envejezca (est. 26)."},
+ {b:"Empiecen por la auditoría externa anual y los controles básicos: firmas, arqueos, conciliaciones (est. 33 y 30).",
+  m:"Activen los comités de auditoría y de riesgos: que se reúnan, dejen constancia y avisen a tiempo (est. 31 y 35).",
+  a:"Control sano. Mantengan vivo el mapa de riesgos y cumplan lo prometido a fondeadores (est. 34 y 36)."},
+ {b:"Un código de ética firmado por todos y reglas para operaciones con vinculados: eso primero (est. 37 y 39).",
+  m:"Formalicen el canal de denuncia y que los conflictos de interés queden declarados en acta (est. 40 y 38).",
+  a:"La ética se sostiene con el ejemplo de la Junta: sigan declarando y apartándose."},
+ {b:"Empiecen por el contrato claro con el asociado o cliente y por definir qué se informa y a quién (est. 44 y 41).",
+  m:"Armen el informe anual de gobernanza y desempeño social: abre puertas con los fondeadores (est. 45).",
+  a:"Su transparencia es carta de presentación: publiquen el informe anual todos los años (est. 45)."},
+ {b:"Definan a quién quieren servir y qué cambio buscan en sus vidas: sin eso no hay pilar social (est. 7.1).",
+  m:"Lleven el informe social a la Junta con la misma seriedad que el financiero (est. 7.2).",
+  a:"Cuiden el equilibrio de precios: justo para el asociado o cliente, viable para la institución (est. 7.7)."},
+ {b:"Empiecen fácil: ahorro de energía, agua y papel, y una lista de actividades que no se hacen ni se financian (est. 8.7 y 8.4).",
+  m:"Pónganle nombre a sus productos o servicios verdes y metas ambientales a la gerencia (est. 8.8 y 8.3).",
+  a:"Ya tienen columna ambiental: infórmenlo, los fondeadores lo valoran (est. 8.5)."}
+];
+const TODAS = []; PILARES.forEach((p,pi)=>p.est.forEach((e,ei)=>TODAS.push({pi,ei,cod:e[0],q:e[1],g:e[2]})));
+const N = TODAS.length;
+const CLAVE = "casa-gobernanza-v1";
+
+// ---------- Estado ----------
+let resp = new Array(N).fill(null); // 0 | 1 | 2
+let idx = 0;
+let nomInst = "";
+try { const g = JSON.parse(localStorage.getItem(CLAVE)); if (g && Array.isArray(g.resp) && g.resp.length===N){ resp=g.resp; idx=Math.min(g.idx||0,N-1); nomInst=g.nom||"";} } catch(e){}
+function guardar(){ try{ localStorage.setItem(CLAVE, JSON.stringify({resp,idx,nom:nomInst})); }catch(e){} }
+
+// ---------- Dibujo de la casa ----------
+function pctPilar(pi){
+  const p=PILARES[pi]; let s=0,c=0;
+  p.est.forEach((e,ei)=>{ const i=TODAS.findIndex(t=>t.pi===pi&&t.ei===ei); const v=resp[i]; if(v!==null){s+=v;c++;} });
+  return { pct: c? Math.round(100*s/(p.est.length*2)) : null, resp:c, tot:p.est.length,
+           pctResp: c? Math.round(100*s/(c*2)) : null };
+}
+function colorPct(x){ return x>=75 ? "var(--verde)" : x>=45 ? "var(--ambar)" : "var(--rojo)"; }
+function dibujarCasa(svg, modo){ // modo: "demo" (todo lleno) | "avance"
+  const css=getComputedStyle(document.documentElement);
+  const W=340,H=260, roofH=64, foundH=32, pad=24;
+  const colTop=roofH+8, colBottom=H-foundH-10, colH=colBottom-colTop;
+  const inner=W-2*pad, gap=7, colW=(inner-7*gap)/8;
+  let s='';
+  s+=`<polygon points="${W/2},2 ${W-4},${roofH} 4,${roofH}" fill="var(--techo)"/>`;
+  s+=`<text x="${W/2}" y="${roofH-14}" text-anchor="middle" font-size="11" font-weight="700" fill="#fff" letter-spacing="1">SOSTENIBILIDAD</text>`;
+  for(let i=0;i<8;i++){
+    const x=pad+i*(colW+gap);
+    const info=pctPilar(i);
+    const lleno = modo==="demo" ? 100 : (info.pct===null?0:info.pct);
+    const completo = modo==="demo" || info.resp===info.tot;
+    let fh = colH*lleno/100;
+    if(modo!=="demo" && info.resp>0 && fh<10) fh=10; // pilar respondido en rojo: se pinta la base
+    s+=`<rect x="${x}" y="${colTop}" width="${colW}" height="${colH}" rx="3" fill="none" stroke="${completo&&modo!=="demo"?colorPct(info.pctResp):"var(--linea)"}" stroke-width="1.5" stroke-dasharray="${completo?'0':'4 3'}"/>`;
+    if(fh>0 && (modo==="demo" || info.resp>0)){
+      const col = modo==="demo" ? (i===6?"#D9A441": i===7?"#4E7C59":"var(--azul)") : colorPct(info.pctResp);
+      s+=`<rect x="${x}" y="${colTop+colH-fh}" width="${colW}" height="${fh}" rx="3" fill="${col}"/>`;
+    }
+    s+=`<text x="${x+colW/2}" y="${colTop+14}" text-anchor="middle" font-size="11" font-weight="700" fill="${fh>colH-18?'#fff':'var(--suave)'}">${i+1}</text>`;
+  }
+  s+=`<rect x="4" y="${colBottom+6}" width="${W-8}" height="${foundH}" rx="4" fill="var(--cimiento)"/>`;
+  s+=`<text x="${W/2}" y="${colBottom+6+foundH/2+4}" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff" letter-spacing="1">JUNTA DIRECTIVA</text>`;
+  svg.innerHTML=s;
+}
+
+// ---------- Pantallas ----------
+const $=id=>document.getElementById(id);
+function mostrar(sec){ ["inicio","pilarIntro","juego","resultado"].forEach(x=>$(x).hidden=(x!==sec)); window.scrollTo(0,0); }
+
+let pilarVisto=-1;
+function pintarIntroPilar(pi){
+  const p=PILARES[pi];
+  $("ipNum").textContent=pi+1; $("ipNum").style.background=p.color;
+  $("ipCorto").textContent="Pilar "+(pi+1)+" de 8";
+  $("ipNombre").textContent="Pilar "+(pi+1)+" · "+p.oficial;
+  $("ipRango").textContent='"'+p.nombre+'" · '+p.est.length+(p.est.length===1?" estándar":" estándares");
+  $("ipQue").textContent=p.que;
+  let lev="";
+  for(let k=0;k<pi;k++){ const inf=pctPilar(k); if(inf.resp===inf.tot){ lev="Columna "+(k+1)+" levantada ("+inf.pct+"%). "; } else { lev=""; break; } }
+  $("ipLevantada").textContent = lev ? "✓ "+lev+"Sigamos construyendo." : "";
+  $("ipLevantada").hidden = !lev;
+  dibujarCasa($("casaPilar"),"avance");
+  mostrar("pilarIntro");
+}
+function pintarPregunta(){
+  const t=TODAS[idx], p=PILARES[t.pi];
+  if(t.pi!==pilarVisto && resp[idx]===null){ pilarVisto=t.pi; pintarIntroPilar(t.pi); return; }
+  pilarVisto=t.pi;
+  const oscuro = p.color==="#D9A441" ? "#3A2E10" : "#FFFFFF";
+  const bn=$("pilBanner"); bn.style.background=p.color; bn.style.color=oscuro;
+  $("chipNum").textContent=t.pi+1;
+  $("chipNombre").textContent="Pilar "+(t.pi+1)+" · "+p.oficial;
+  $("chipSub").textContent='"'+p.nombre+'" · '+p.est.length+" estándares";
+  const done=resp.filter(v=>v!==null).length;
+  $("barraProg").style.width=(100*done/N)+"%";
+  $("lblProg").textContent="Pregunta "+(idx+1)+" de "+N;
+  $("numEst").textContent="Estándar "+t.cod+" · "+p.oficial;
+  $("txtPregunta").textContent=t.q;
+  $("txtPista").textContent=t.g;
+  document.querySelectorAll(".btn-resp").forEach(b=>{
+    b.className="btn btn-resp"+(resp[idx]!==null && Number(b.dataset.v)===resp[idx] ? " sel-"+resp[idx] : "");
+  });
+  $("btnAtras").style.visibility = idx>0 ? "visible":"hidden";
+  dibujarCasa($("casaJuego"),"avance");
+  mostrar("juego");
+}
+function responder(v){
+  resp[idx]=v; guardar();
+  let sig=-1;
+  for(let k=1;k<N;k++){ const j=(idx+k)%N; if(resp[j]===null){ sig=j; break; } }
+  if(sig!==-1){ idx=sig; pintarPregunta(); return; }
+  if(idx<N-1){ idx++; pintarPregunta(); return; } // modo revisión: avanzar
+  pintarResultado(); mostrar("resultado");
+}
+function pintarResultado(){
+  dibujarCasa($("casaFinal"),"avance");
+  const hoy=new Date().toLocaleDateString("es-GT",{day:"numeric",month:"long",year:"numeric"});
+  $("metaResultado").textContent=(nomInst? nomInst+" · " : "")+hoy;
+  const nv=resp.filter(v=>v===2).length, na=resp.filter(v=>v===1).length, nr=resp.filter(v=>v===0).length;
+  $("cntVerde").textContent=nv+" estándares firmes";
+  $("cntAmbar").textContent=na+" a medias";
+  $("cntRojo").textContent=nr+" por construir";
+  let s=0; resp.forEach(v=>s+=v||0);
+  const total=Math.round(100*s/(N*2));
+  $("pctTotal").textContent=total+"%";
+  $("pctTotal").style.color=colorPct(total);
+  let v,txt;
+  if(total>=75){ v="Casa firme."; txt="Su casa tiene buenas columnas. Lo que sigue es mantenerla: revisar cada año y atender lo amarillo antes de que se vuelva rojo."; }
+  else if(total>=45){ v="Casa en obra."; txt="Hay columnas levantadas y otras a medias. Con la lista de abajo, su Junta puede decidir qué construir primero. Empiece por lo rojo de los pilares 2 y 3."; }
+  else { v="Hay que construir."; txt="La buena noticia: ya saben exactamente qué falta. Ninguna casa se construye en un día. Escojan tres cosas de la lista roja y empiecen por ahí este año."; }
+  $("veredicto").textContent=v; $("veredictoTxt").textContent=txt;
+  // barras por pilar
+  let html="";
+  PILARES.forEach((p,pi)=>{
+    const i=pctPilar(pi); const val=i.pct??0;
+    const sg=SUGERENCIAS[pi]; const consejo = val>=75? sg.a : val>=45? sg.m : sg.b;
+    html+=`<div class="nombre-pilar" style="margin-top:14px">Pilar ${pi+1} · ${p.oficial} <span style="color:var(--suave);font-weight:400">(${p.nombre})</span></div>
+    <div class="barra-pilar"><span class="num" style="background:${p.color}">${pi+1}</span>
+    <div class="barra-pista"><div style="width:${val}%;background:${colorPct(val)}"></div></div>
+    <span class="pct">${val}%</span></div>
+    <div class="peq" style="margin-top:4px;padding-left:36px"><b style="color:${colorPct(val)}">Sugerencia:</b> ${consejo}</div>`;
+    p.est.forEach((e,ei)=>{
+      const gi=TODAS.findIndex(t=>t.pi===pi&&t.ei===ei); const v=resp[gi];
+      const pe = v===null? null : v*50;
+      const colE = v===null? "var(--suave)" : colorPct(pe===50?50:pe);
+      html+=`<div style="display:grid;grid-template-columns:36px 44px 1fr 48px;gap:6px;align-items:center;margin-top:3px;font-size:13px">
+        <span></span>
+        <span style="font-weight:700;color:var(--suave)">${e[0]}</span>
+        <span style="color:var(--suave)">${e[2]}</span>
+        <span class="pct" style="color:${colE}">${pe===null?"—":pe+"%"}</span></div>`;
+    });
+  });
+  $("listaPilares").innerHTML=html;
+  // faltas
+  const rojas=[], amarillas=[];
+  TODAS.forEach((t,i)=>{ if(resp[i]===0) rojas.push(t); else if(resp[i]===1) amarillas.push(t); });
+  let f="";
+  rojas.forEach(t=>{ f+=`<div class="falta-item"><b>Estándar ${t.cod} · Pilar ${t.pi+1}, ${PILARES[t.pi].oficial} — No lo tenemos</b><span>${t.g}</span></div>`; });
+  amarillas.forEach(t=>{ f+=`<div class="falta-item medio"><b>Estándar ${t.cod} · Pilar ${t.pi+1}, ${PILARES[t.pi].oficial} — A medias</b><span>${t.g}</span></div>`; });
+  $("listaFaltas").innerHTML=f;
+  $("sinFaltas").hidden = !!(rojas.length||amarillas.length);
+}
+
+// ---------- Eventos ----------
+$("btnEmpezar").addEventListener("click",()=>{ resp=new Array(N).fill(null); idx=0; pilarVisto=-1; nomInst=$("nomInst").value.trim(); guardar(); pintarPregunta(); });
+$("btnContinuar").addEventListener("click",()=>{ if($("nomInst").value.trim()) nomInst=$("nomInst").value.trim();
+  if(resp.every(v=>v!==null)){ pintarResultado(); mostrar("resultado"); }
+  else { const sig=resp.findIndex(v=>v===null); idx=sig===-1?0:sig; pilarVisto=-1; pintarPregunta(); }
+});
+document.querySelectorAll(".btn-resp").forEach(b=>b.addEventListener("click",()=>responder(Number(b.dataset.v))));
+$("btnAtras").addEventListener("click",()=>{ if(idx>0){ idx--; pilarVisto=TODAS[idx].pi; pintarPregunta(); } });
+$("btnLevantar").addEventListener("click",()=>{ pilarVisto=TODAS[idx].pi; pintarPregunta(); });
+$("btnRevisar").addEventListener("click",()=>{ idx=0; pilarVisto=TODAS[0].pi; pintarPregunta(); });
+$("btnReiniciar").addEventListener("click",()=>{ resp=new Array(N).fill(null); idx=0; pilarVisto=-1; guardar(); pintarPregunta(); });
+
+// ---------- Arranque ----------
+dibujarCasa($("casaInicio"),"demo");
+if(resp.some(v=>v!==null)){ $("btnContinuar").hidden=false; $("btnEmpezar").textContent="Empezar de nuevo"; }
+if(nomInst) $("nomInst").value=nomInst;
+</script>
+
+</body>
+</html>
