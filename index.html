@@ -13,6 +13,7 @@
     --linea:#E3DFD6; --techo:#8C3A2B; --cimiento:#6B5B4E; --azul:#24425B; --acento:#E07A5F;
     --verde:#3E7C4F; --ambar:#C9922A; --rojo:#B0442E;
     --verde-f:#E7F0E9; --ambar-f:#F7EEDC; --rojo-f:#F6E6E1; --btn:#24425B;
+    --papel:#6E7FA3; --papel-f:#E9ECF4;
   }
   @media (prefers-color-scheme: dark){
     :root:not([data-theme="light"]){
@@ -20,6 +21,7 @@
       --linea:#39424E; --techo:#C06A54; --cimiento:#9C8874; --azul:#8FB0CC; --acento:#E07A5F;
       --verde:#6FAE7F; --ambar:#D9A441; --rojo:#D0705A;
       --verde-f:#22352A; --ambar-f:#3A311F; --rojo-f:#3A2620; --btn:#2E5474;
+      --papel:#98A6C9; --papel-f:#2A3040;
     }
   }
   :root[data-theme="dark"]{
@@ -27,6 +29,7 @@
     --linea:#39424E; --techo:#C06A54; --cimiento:#9C8874; --azul:#8FB0CC; --acento:#E07A5F;
     --verde:#6FAE7F; --ambar:#D9A441; --rojo:#D0705A;
     --verde-f:#22352A; --ambar-f:#3A311F; --rojo-f:#3A2620; --btn:#2E5474;
+    --papel:#98A6C9; --papel-f:#2A3040;
   }
   *{box-sizing:border-box}
   body{margin:0;background:var(--fondo);color:var(--tinta);
@@ -43,10 +46,11 @@
   .btn-resp{display:flex;align-items:center;gap:12px;border:2px solid var(--linea);background:var(--tarjeta)}
   .btn-resp .dot{width:22px;height:22px;border-radius:50%;flex:0 0 22px}
   .btn-resp:active{transform:scale(.99)}
-  .btn-resp.sel-2{border-color:var(--verde);background:var(--verde-f)}
-  .btn-resp.sel-1{border-color:var(--ambar);background:var(--ambar-f)}
+  .btn-resp.sel-100{border-color:var(--verde);background:var(--verde-f)}
+  .btn-resp.sel-50{border-color:var(--ambar);background:var(--ambar-f)}
+  .btn-resp.sel-25{border-color:var(--papel);background:var(--papel-f)}
   .btn-resp.sel-0{border-color:var(--rojo);background:var(--rojo-f)}
-  .dot-2{background:var(--verde)} .dot-1{background:var(--ambar)} .dot-0{background:var(--rojo)}
+  .dot-100{background:var(--verde)} .dot-50{background:var(--ambar)} .dot-25{background:var(--papel)} .dot-0{background:var(--rojo)}
   .chip{display:inline-flex;align-items:center;gap:8px;background:var(--arena);border-radius:999px;
     padding:4px 12px;font-size:13px;font-weight:700}
   .chip .num{width:22px;height:22px;border-radius:50%;color:#fff;display:inline-flex;align-items:center;
@@ -74,6 +78,7 @@
   .falta-item{border-left:4px solid var(--rojo);background:var(--tarjeta);border-radius:0 10px 10px 0;
     padding:10px 14px;margin-top:8px}
   .falta-item.medio{border-left-color:var(--ambar)}
+  .falta-item.papel{border-left-color:var(--papel)}
   .falta-item b{display:block}
   .falta-item span{font-size:14px;color:var(--suave)}
   .resumen-num{font-family:Bitter,Georgia,serif;font-size:54px;font-weight:700;line-height:1}
@@ -110,7 +115,7 @@
     Nadie más las ve: ni el fondeador, ni los facilitadores, ni otras instituciones. Es una herramienta para
     uso interno de su Junta Directiva y su gerencia.</div>
     <p class="peq" style="margin-top:14px">Basado en los pilares y estándares de gobernanza del Programa GIF,
-    más los pilares 7 (desempeño social) y 8 (gestión ambiental). Se responde en unos 15 minutos, solo o en equipo.
+    más los pilares 7 (desempeño social) y 8 (gestión ambiental). Sirve para cualquier tipo de institución: cooperativas, asociaciones de productores, cajas rurales o microfinancieras. Se responde en unos 15 minutos, solo o en equipo.
     Consejo: respóndala en la próxima sesión de Junta, entre todos.</p>
     <p class="peq" style="margin-top:10px;font-weight:600">Una herramienta de Grupo Analítica, preparada para la
     capacitación en gobernanza de Oikocredit · 2026.</p>
@@ -145,8 +150,9 @@
       <div class="num-est" id="numEst"></div>
       <div class="pregunta" id="txtPregunta"></div>
       <p class="peq" id="txtPista" style="margin:2px 0 6px"></p>
-      <button class="btn btn-resp" data-v="2"><span class="dot dot-2"></span><span>Sí, lo tenemos y funciona</span></button>
-      <button class="btn btn-resp" data-v="1"><span class="dot dot-1"></span><span>Lo tenemos a medias</span></button>
+      <button class="btn btn-resp" data-v="100"><span class="dot dot-100"></span><span>Sí, lo tenemos y funciona</span></button>
+      <button class="btn btn-resp" data-v="50"><span class="dot dot-50"></span><span>Lo tenemos a medias</span></button>
+      <button class="btn btn-resp" data-v="25"><span class="dot dot-25"></span><span>Está escrito y no lo usamos</span></button>
       <button class="btn btn-resp" data-v="0"><span class="dot dot-0"></span><span>No lo tenemos</span></button>
       <button class="atras" id="btnAtras">← Regresar a la pregunta anterior</button>
     </div>
@@ -163,15 +169,16 @@
       <div style="flex:1;min-width:220px"><div class="veredicto" id="veredicto"></div><p id="veredictoTxt" style="margin:4px 0 0;font-size:15px"></p></div>
     </div>
     <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:14px">
-      <span class="chip" style="background:var(--verde-f)"><span class="dot dot-2" style="width:14px;height:14px;border-radius:50%"></span>&nbsp;<span id="cntVerde"></span></span>
-      <span class="chip" style="background:var(--ambar-f)"><span class="dot dot-1" style="width:14px;height:14px;border-radius:50%"></span>&nbsp;<span id="cntAmbar"></span></span>
+      <span class="chip" style="background:var(--verde-f)"><span class="dot dot-100" style="width:14px;height:14px;border-radius:50%"></span>&nbsp;<span id="cntVerde"></span></span>
+      <span class="chip" style="background:var(--ambar-f)"><span class="dot dot-50" style="width:14px;height:14px;border-radius:50%"></span>&nbsp;<span id="cntAmbar"></span></span>
+      <span class="chip" style="background:var(--papel-f)"><span class="dot dot-25" style="width:14px;height:14px;border-radius:50%"></span>&nbsp;<span id="cntPapel"></span></span>
       <span class="chip" style="background:var(--rojo-f)"><span class="dot dot-0" style="width:14px;height:14px;border-radius:50%"></span>&nbsp;<span id="cntRojo"></span></span>
     </div>
     <h3 style="font-size:20px;margin-top:26px">Columna por columna, con sugerencias</h3>
-    <p class="peq" style="margin:4px 0 0">Cada pilar muestra su porcentaje, una sugerencia y el cumplimiento de cada estándar: 100% lo tenemos y funciona, 50% a medias, 0% no lo tenemos.</p>
+    <p class="peq" style="margin:4px 0 0">Cada pilar muestra su porcentaje, una sugerencia y el cumplimiento de cada estándar: 100% lo tenemos y funciona, 50% a medias, 25% está escrito y no se usa, 0% no lo tenemos.</p>
     <div id="listaPilares"></div>
     <h3 style="font-size:20px;margin-top:26px">Lo que le falta a su casa</h3>
-    <p class="peq" style="margin:4px 0 0">Primero lo rojo (no lo tenemos), luego lo amarillo (a medias). Cada punto
+    <p class="peq" style="margin:4px 0 0">Primero lo rojo (no lo tenemos), luego lo que está escrito y no se usa (lo más fácil de poner a funcionar) y por último lo amarillo (a medias). Cada punto
     dice qué significa tenerlo. Esta lista puede ser la agenda de sus próximas sesiones de Junta.</p>
     <div id="listaFaltas"></div>
     <div id="sinFaltas" hidden style="margin-top:10px"><b>No les falta nada según sus respuestas.</b>
@@ -220,8 +227,8 @@ const PILARES = [
   ]},
   { nombre:"Gestión", oficial:"Gestión", que:"La gerencia ejecuta lo que la Junta decide y responde por los resultados. Aquí vive el plan de sucesión.", color:"#24425B", est:[
     ["22","¿La gerencia ejecuta y la Junta dirige y vigila, cada quien en lo suyo?","Rol del ejecutivo principal y la alta gerencia respetado."],
-    ["23","¿Se atiende bien a clientes, personal, fondeadores y comunidad?","Relacionamiento con los grupos de interés."],
-    ["24","¿Se sirve bien a quien más lo necesita, con trato justo?","Compromiso con clientes e inclusión financiera."],
+    ["23","¿Se atiende bien a asociados, clientes, personal, fondeadores y comunidad?","Relacionamiento con los grupos de interés."],
+    ["24","¿Se sirve bien a quien más lo necesita, con trato justo y acceso a los servicios?","Compromiso con clientes e inclusión financiera."],
     ["25","¿El personal trabaja con condiciones dignas, capacitación y respeto?","Trato responsable del personal."],
     ["26","Si alguien clave se va mañana, ¿se sabe quién sigue y está preparado?","Plan de sucesión escrito y vigente."],
     ["27","¿Hay reglas claras de cómo se paga a la gerencia y al personal?","Política de remuneración."],
@@ -240,34 +247,34 @@ const PILARES = [
   { nombre:"Ética", oficial:"Ética y Conflicto de Interés", que:"Reglas de conducta que todos conocen, y una regla de oro: nadie decide sobre lo que le conviene a sí mismo.", color:"#24425B", est:[
     ["37","¿Hay un código de ética escrito que todos conocen y firman?","Código de ética vivo, no archivado."],
     ["38","¿Quien tiene interés propio en una decisión lo declara y se aparta?","Manejo del conflicto de interés."],
-    ["39","¿Los créditos o negocios con familiares y directivos tienen reglas y se registran?","Operaciones con partes vinculadas reguladas y a la vista."],
+    ["39","¿Los créditos, compras o contratos con familiares y directivos tienen reglas y se registran?","Operaciones con partes vinculadas reguladas y a la vista."],
     ["40","¿Cualquiera puede denunciar sin miedo a represalias?","Canales de denuncia."]
   ]},
   { nombre:"Transparencia", oficial:"Comunicación y Transparencia", que:"Lo que pasa en la institución se cuenta con claridad: a los asociados, a los clientes y a los fondeadores.", color:"#24425B", est:[
     ["41","¿Está definido qué se informa, a quién y cuándo?","Política de información."],
     ["42","¿Lo esencial de la institución se puede consultar fácilmente?","Información de acceso público."],
     ["43","¿Las operaciones con vinculados se informan, no se esconden?","Transacciones entre partes relacionadas informadas."],
-    ["44","¿El cliente entiende lo que firma: tasa, cuota y cargos?","Transparencia contractual con el cliente."],
+    ["44","¿El asociado o cliente entiende lo que firma: precio, condiciones y cargos?","Transparencia contractual con el cliente."],
     ["45","¿Cada año se publica un informe de gobernanza y desempeño social?","Informe anual de gobernanza y desempeño social."]
   ]},
   { nombre:"Social", oficial:"Desempeño Social en la Gobernanza", que:"La institución existe para servir a personas. Eso se define, se mide y se vigila, igual que lo financiero.", color:"#D9A441", est:[
     ["7.1","¿Se sabe a quién se quiere servir y qué cambio se busca en sus vidas?","Objetivos de impacto social definidos."],
     ["7.2","¿La Junta pide y revisa el informe social como pide el financiero?","Competencias y compromiso de la directiva con lo social."],
     ["7.3","¿La gerencia lidera lo social con metas e indicadores?","Gestión social y liderazgo de la alta gerencia."],
-    ["7.4","¿Se cuida no sobreendeudar al cliente ni maltratarlo en el cobro?","Gestión de riesgos y cumplimiento social."],
-    ["7.5","¿El código de ética incluye el trato justo al cliente y a la comunidad?","Código de ética con valores sociales."],
+    ["7.4","¿Se cuida no abusar del asociado o cliente: ni sobreendeudarlo ni maltratarlo en el cobro o en el pago?","Gestión de riesgos y cumplimiento social."],
+    ["7.5","¿El código de ética incluye el trato justo al asociado, al cliente y a la comunidad?","Código de ética con valores sociales."],
     ["7.6","¿Se busca ganar dinero sin dejar de lado a las personas ni el entorno?","Equilibrio económico, social y ambiental."],
-    ["7.7","¿Las tasas y cargos son justos, sin poner en riesgo la institución?","Equilibrio en precios, tarifas e indicadores."]
+    ["7.7","¿Los precios, tasas y cargos son justos, sin poner en riesgo la institución?","Equilibrio en precios, tarifas e indicadores."]
   ]},
-  { nombre:"Ambiental", oficial:"Gestión Medioambiental (GMA)", que:"Cuidar el entorno: en lo que la institución hace adentro y en lo que financia afuera.", color:"#4E7C59", est:[
+  { nombre:"Ambiental", oficial:"Gestión Medioambiental (GMA)", que:"Cuidar el entorno: en lo que la institución hace adentro y en lo que produce o financia afuera.", color:"#4E7C59", est:[
     ["8.1","¿La institución tiene objetivos claros en lo ambiental?","Objetivos de la organización en la GMA."],
     ["8.2","¿La asamblea conoce y aprueba el compromiso ambiental?","La Asamblea y su rol con la GMA."],
     ["8.3","¿La gerencia tiene responsables y metas ambientales?","GMA de la alta gerencia."],
-    ["8.4","¿Se revisa qué actividades financiadas dañan el ambiente y se cumple la ley?","Cumplimiento y gestión de riesgos ambientales."],
+    ["8.4","¿Se revisa qué actividades propias o financiadas dañan el ambiente y se cumple la ley?","Cumplimiento y gestión de riesgos ambientales."],
     ["8.5","¿Se informa lo que se hace en lo ambiental?","Transparencia en la GMA."],
     ["8.6","¿Se busca crecer sin dañar el entorno?","Equilibrio del crecimiento económico con la GMA."],
     ["8.7","¿Se ahorra energía, agua y papel en la propia institución?","Ecoeficiencia: buenas prácticas ambientales internas."],
-    ["8.8","¿Existen créditos verdes: riego, paneles solares, estufas mejoradas, reforestación?","Productos financieros verdes."]
+    ["8.8","¿Existen productos o servicios verdes: riego, paneles solares, café o ganadería sostenible, reforestación?","Productos financieros verdes."]
   ]}
 ];
 const SUGERENCIAS=[
@@ -283,25 +290,25 @@ const SUGERENCIAS=[
  {b:"Empiecen por la auditoría externa anual y los controles básicos: firmas, arqueos, conciliaciones (est. 33 y 30).",
   m:"Activen los comités de auditoría y de riesgos: que se reúnan, dejen constancia y avisen a tiempo (est. 31 y 35).",
   a:"Control sano. Mantengan vivo el mapa de riesgos y cumplan lo prometido a fondeadores (est. 34 y 36)."},
- {b:"Un código de ética firmado por todos y reglas para créditos con vinculados: eso primero (est. 37 y 39).",
+ {b:"Un código de ética firmado por todos y reglas para operaciones con vinculados: eso primero (est. 37 y 39).",
   m:"Formalicen el canal de denuncia y que los conflictos de interés queden declarados en acta (est. 40 y 38).",
   a:"La ética se sostiene con el ejemplo de la Junta: sigan declarando y apartándose."},
- {b:"Empiecen por el contrato claro con el cliente y por definir qué se informa y a quién (est. 44 y 41).",
+ {b:"Empiecen por el contrato claro con el asociado o cliente y por definir qué se informa y a quién (est. 44 y 41).",
   m:"Armen el informe anual de gobernanza y desempeño social: abre puertas con los fondeadores (est. 45).",
   a:"Su transparencia es carta de presentación: publiquen el informe anual todos los años (est. 45)."},
  {b:"Definan a quién quieren servir y qué cambio buscan en sus vidas: sin eso no hay pilar social (est. 7.1).",
   m:"Lleven el informe social a la Junta con la misma seriedad que el financiero (est. 7.2).",
-  a:"Cuiden el equilibrio de precios: justo para el cliente, viable para la institución (est. 7.7)."},
- {b:"Empiecen fácil: ahorro de energía, agua y papel, y una lista de actividades que no se financian (est. 8.7 y 8.4).",
-  m:"Pónganle nombre a sus créditos verdes y metas ambientales a la gerencia (est. 8.8 y 8.3).",
+  a:"Cuiden el equilibrio de precios: justo para el asociado o cliente, viable para la institución (est. 7.7)."},
+ {b:"Empiecen fácil: ahorro de energía, agua y papel, y una lista de actividades que no se hacen ni se financian (est. 8.7 y 8.4).",
+  m:"Pónganle nombre a sus productos o servicios verdes y metas ambientales a la gerencia (est. 8.8 y 8.3).",
   a:"Ya tienen columna ambiental: infórmenlo, los fondeadores lo valoran (est. 8.5)."}
 ];
 const TODAS = []; PILARES.forEach((p,pi)=>p.est.forEach((e,ei)=>TODAS.push({pi,ei,cod:e[0],q:e[1],g:e[2]})));
 const N = TODAS.length;
-const CLAVE = "casa-gobernanza-v1";
+const CLAVE = "casa-gobernanza-v2";
 
 // ---------- Estado ----------
-let resp = new Array(N).fill(null); // 0 | 1 | 2
+let resp = new Array(N).fill(null); // 0 | 25 | 50 | 100
 let idx = 0;
 let nomInst = "";
 try { const g = JSON.parse(localStorage.getItem(CLAVE)); if (g && Array.isArray(g.resp) && g.resp.length===N){ resp=g.resp; idx=Math.min(g.idx||0,N-1); nomInst=g.nom||"";} } catch(e){}
@@ -311,8 +318,8 @@ function guardar(){ try{ localStorage.setItem(CLAVE, JSON.stringify({resp,idx,no
 function pctPilar(pi){
   const p=PILARES[pi]; let s=0,c=0;
   p.est.forEach((e,ei)=>{ const i=TODAS.findIndex(t=>t.pi===pi&&t.ei===ei); const v=resp[i]; if(v!==null){s+=v;c++;} });
-  return { pct: c? Math.round(100*s/(p.est.length*2)) : null, resp:c, tot:p.est.length,
-           pctResp: c? Math.round(100*s/(c*2)) : null };
+  return { pct: c? Math.round(s/p.est.length) : null, resp:c, tot:p.est.length,
+           pctResp: c? Math.round(s/c) : null };
 }
 function colorPct(x){ return x>=75 ? "var(--verde)" : x>=45 ? "var(--ambar)" : "var(--rojo)"; }
 function dibujarCasa(svg, modo){ // modo: "demo" (todo lleno) | "avance"
@@ -395,12 +402,13 @@ function pintarResultado(){
   dibujarCasa($("casaFinal"),"avance");
   const hoy=new Date().toLocaleDateString("es-GT",{day:"numeric",month:"long",year:"numeric"});
   $("metaResultado").textContent=(nomInst? nomInst+" · " : "")+hoy;
-  const nv=resp.filter(v=>v===2).length, na=resp.filter(v=>v===1).length, nr=resp.filter(v=>v===0).length;
+  const nv=resp.filter(v=>v===100).length, na=resp.filter(v=>v===50).length, np=resp.filter(v=>v===25).length, nr=resp.filter(v=>v===0).length;
   $("cntVerde").textContent=nv+" estándares firmes";
   $("cntAmbar").textContent=na+" a medias";
+  $("cntPapel").textContent=np+" escritos sin usar";
   $("cntRojo").textContent=nr+" por construir";
   let s=0; resp.forEach(v=>s+=v||0);
-  const total=Math.round(100*s/(N*2));
+  const total=Math.round(s/N);
   $("pctTotal").textContent=total+"%";
   $("pctTotal").style.color=colorPct(total);
   let v,txt;
@@ -420,8 +428,8 @@ function pintarResultado(){
     <div class="peq" style="margin-top:4px;padding-left:36px"><b style="color:${colorPct(val)}">Sugerencia:</b> ${consejo}</div>`;
     p.est.forEach((e,ei)=>{
       const gi=TODAS.findIndex(t=>t.pi===pi&&t.ei===ei); const v=resp[gi];
-      const pe = v===null? null : v*50;
-      const colE = v===null? "var(--suave)" : colorPct(pe===50?50:pe);
+      const pe = v;
+      const colE = v===null? "var(--suave)" : v===25? "var(--papel)" : colorPct(pe);
       html+=`<div style="display:grid;grid-template-columns:36px 44px 1fr 48px;gap:6px;align-items:center;margin-top:3px;font-size:13px">
         <span></span>
         <span style="font-weight:700;color:var(--suave)">${e[0]}</span>
@@ -431,13 +439,14 @@ function pintarResultado(){
   });
   $("listaPilares").innerHTML=html;
   // faltas
-  const rojas=[], amarillas=[];
-  TODAS.forEach((t,i)=>{ if(resp[i]===0) rojas.push(t); else if(resp[i]===1) amarillas.push(t); });
+  const rojas=[], papel=[], amarillas=[];
+  TODAS.forEach((t,i)=>{ if(resp[i]===0) rojas.push(t); else if(resp[i]===25) papel.push(t); else if(resp[i]===50) amarillas.push(t); });
   let f="";
   rojas.forEach(t=>{ f+=`<div class="falta-item"><b>Estándar ${t.cod} · Pilar ${t.pi+1}, ${PILARES[t.pi].oficial} — No lo tenemos</b><span>${t.g}</span></div>`; });
+  papel.forEach(t=>{ f+=`<div class="falta-item papel"><b>Estándar ${t.cod} · Pilar ${t.pi+1}, ${PILARES[t.pi].oficial} — Está escrito y no se usa</b><span>${t.g}</span></div>`; });
   amarillas.forEach(t=>{ f+=`<div class="falta-item medio"><b>Estándar ${t.cod} · Pilar ${t.pi+1}, ${PILARES[t.pi].oficial} — A medias</b><span>${t.g}</span></div>`; });
   $("listaFaltas").innerHTML=f;
-  $("sinFaltas").hidden = !!(rojas.length||amarillas.length);
+  $("sinFaltas").hidden = !!(rojas.length||papel.length||amarillas.length);
 }
 
 // ---------- Eventos ----------
